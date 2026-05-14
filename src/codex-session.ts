@@ -471,6 +471,7 @@ export class CodexSessionService {
         approval_policy: this.currentLaunchProfile.approvalPolicy,
       },
       env: buildCodexEnv(this.config.codexApiKey),
+      codexPathOverride: this.config.codexBin,
     });
   }
 }

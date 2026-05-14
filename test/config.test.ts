@@ -16,6 +16,7 @@ describe("loadConfig", () => {
     delete process.env.TELEGRAM_BOT_TOKEN;
     delete process.env.TELEGRAM_ALLOWED_USER_IDS;
     delete process.env.CODEX_API_KEY;
+    delete process.env.CODEX_BIN;
     delete process.env.CODEX_MODEL;
     delete process.env.CODEX_SANDBOX_MODE;
     delete process.env.CODEX_APPROVAL_POLICY;
@@ -69,6 +70,7 @@ describe("loadConfig", () => {
       workspace: process.cwd(),
       maxFileSize: 20 * 1024 * 1024,
       codexApiKey: "secret-key",
+      codexBin: undefined,
       codexModel: "o3",
       codexSandboxMode: "danger-full-access",
       codexApprovalPolicy: "on-request",
@@ -111,6 +113,7 @@ describe("loadConfig", () => {
     const config = loadConfig();
 
     expect(config.codexApiKey).toBeUndefined();
+    expect(config.codexBin).toBeUndefined();
     expect(config.codexModel).toBeUndefined();
     expect(config.maxFileSize).toBe(20 * 1024 * 1024);
     expect(config.codexSandboxMode).toBe("workspace-write");
@@ -231,6 +234,16 @@ describe("loadConfig", () => {
     const config = loadConfig();
 
     expect(config.maxFileSize).toBe(5 * 1024 * 1024);
+  });
+
+  it("parses CODEX_BIN when configured", () => {
+    process.env.TELEGRAM_BOT_TOKEN = "bot-token";
+    process.env.TELEGRAM_ALLOWED_USER_IDS = "123";
+    process.env.CODEX_BIN = "  /opt/codex-custom/bin/codex  ";
+
+    const config = loadConfig();
+
+    expect(config.codexBin).toBe("/opt/codex-custom/bin/codex");
   });
 
   it("parses ENABLE_TELEGRAM_LOGIN boolean values", () => {

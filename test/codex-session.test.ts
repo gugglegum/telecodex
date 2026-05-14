@@ -178,6 +178,16 @@ describe("CodexSessionService", () => {
     });
   });
 
+  it("passes the configured Codex binary override to the SDK", async () => {
+    await CodexSessionService.create(createConfig({ codexBin: "/opt/codex-custom/bin/codex" }));
+
+    expect(mockState.createdCodexOptions[0]).toEqual(
+      expect.objectContaining({
+        codexPathOverride: "/opt/codex-custom/bin/codex",
+      }),
+    );
+  });
+
   it("create accepts overrides for workspace, model, reasoning effort, launch profile, and resumeThreadId", async () => {
     const service = await CodexSessionService.create(createConfig(), {
       workspace: "/workspace/resumed",
